@@ -25,16 +25,8 @@ public class ChartEventPublisher {
         publishEvent("savePaymentTopic", "save-payment-sent", orderEvent);
     }
 
-    public void publishChartDeleteFailed(OrderEvent orderEvent) {
-        publishEvent("chartDeleteFailedTopic", "chart-delete-failed-sent", orderEvent);
-    }
-
-    public void publishChartRollbacked(OrderEvent orderEvent) {
-        publishEvent("chartRollbackedTopic", "chart-rollbacked-sent", orderEvent);
-    }
-
-    public void publishChartRollbackFailed(OrderEvent orderEvent) {
-        publishEvent("chartRollbackFailedTopic", "chart-rollback-failed-sent", orderEvent);
+    public void publishRollbackInventory(OrderEvent orderEvent) {
+        publishEvent("rollbackInventoryTopic", "rollback-inventory-sent", orderEvent);
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {

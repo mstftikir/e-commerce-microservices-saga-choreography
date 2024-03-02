@@ -33,7 +33,7 @@ public class ChartService {
         } catch (Exception exception) {
             log.error("Deleting chart failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.FAILED);
-            eventPublisher.publishChartDeleteFailed(orderEvent);
+            eventPublisher.publishRollbackInventory(orderEvent);
         }
     }
 
@@ -41,11 +41,11 @@ public class ChartService {
         try {
             updateChart("Rollback", orderEvent.getOrder().getUserId());
             orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.ROLLBACK);
-            eventPublisher.publishChartRollbacked(orderEvent);
+            eventPublisher.publishRollbackInventory(orderEvent);
         } catch (Exception exception) {
             log.error("Rollbacking chart failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.ROLLBACK_FAILED);
-            eventPublisher.publishChartRollbackFailed(orderEvent);
+            eventPublisher.publishRollbackInventory(orderEvent);
         }
     }
 

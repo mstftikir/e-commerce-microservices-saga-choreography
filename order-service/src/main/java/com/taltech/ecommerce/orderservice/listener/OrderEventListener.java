@@ -33,7 +33,7 @@ public class OrderEventListener {
         Observation.createNotStarted("order-failed-received", this.observationRegistry)
             .observe(() -> {
                 log.info("Order failed event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
-                service.paymentSaveFailed(orderEvent);
+                service.orderFailed(orderEvent);
             });
     }
 }

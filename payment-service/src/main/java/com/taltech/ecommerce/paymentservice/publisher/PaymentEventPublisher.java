@@ -25,16 +25,8 @@ public class PaymentEventPublisher {
         publishEvent("orderCompletedTopic", "payment-saved-sent", orderEvent);
     }
 
-    public void publishPaymentSaveFailed(OrderEvent orderEvent) {
-        publishEvent("paymentSaveFailedTopic", "payment-save-failed-sent", orderEvent);
-    }
-
-    public void publishPaymentRollbacked(OrderEvent orderEvent) {
-        publishEvent("paymentRollbackedTopic", "payment-rollbacked-sent", orderEvent);
-    }
-
-    public void publishPaymentRollbackFailed(OrderEvent orderEvent) {
-        publishEvent("paymentRollbackFailedTopic", "payment-rollback-failed-sent", orderEvent);
+    public void publishRollbackChart(OrderEvent orderEvent) {
+        publishEvent("rollbackChartTopic", "rollback-chart-sent", orderEvent);
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {

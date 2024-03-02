@@ -68,11 +68,14 @@ public class OrderService {
         repository.saveAndFlush(order);
     }
 
-    public void paymentSaveFailed(OrderEvent orderEvent) {
-        Order order = findOrderByEventId(orderEvent.getOrder().getOrderEventStatus().getId());
-        order.getOrderEventStatus().setInventoryStatus(orderEvent.getOrder().getOrderEventStatus().getInventoryStatus());
-        order.getOrderEventStatus().setChartStatus(orderEvent.getOrder().getOrderEventStatus().getChartStatus());
-        order.getOrderEventStatus().setPaymentStatus(orderEvent.getOrder().getOrderEventStatus().getPaymentStatus());
+    public void orderFailed(OrderEvent orderEvent) {
+        Order receivedOrder = mapper.toModel(orderEvent.getOrder());
+        Order order = findOrderByEventId(receivedOrder.getOrderEventStatus().getId());
+
+        order.getOrderEventStatus().setInventoryStatus(receivedOrder.getOrderEventStatus().getInventoryStatus());
+        order.getOrderEventStatus().setChartStatus(receivedOrder.getOrderEventStatus().getChartStatus());
+        order.getOrderEventStatus().setPaymentStatus(receivedOrder.getOrderEventStatus().getPaymentStatus());
+
         repository.saveAndFlush(order);
     }
 

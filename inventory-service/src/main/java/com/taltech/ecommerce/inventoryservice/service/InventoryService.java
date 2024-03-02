@@ -37,7 +37,7 @@ public class InventoryService {
         catch (Exception exception) {
             log.error("Updating inventory failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.FAILED);
-            eventPublisher.publishInventoryUpdateFailed(orderEvent);
+            eventPublisher.publishOrderFailed(orderEvent);
         }
     }
 
@@ -46,12 +46,12 @@ public class InventoryService {
         try {
             updateInventories("Rollback", inventoryList);
             orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.ROLLBACK);
-            eventPublisher.publishInventoryRollbacked(orderEvent);
+            eventPublisher.publishOrderFailed(orderEvent);
         }
         catch (Exception exception) {
             log.error("Rollbacking inventory failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.ROLLBACK_FAILED);
-            eventPublisher.publishInventoryRollbackFailed(orderEvent);
+            eventPublisher.publishOrderFailed(orderEvent);
         }
     }
 

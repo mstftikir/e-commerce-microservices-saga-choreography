@@ -25,16 +25,8 @@ public class InventoryEventPublisher {
         publishEvent("deleteChartTopic", "delete-chart-sent", orderEvent);
     }
 
-    public void publishInventoryUpdateFailed(OrderEvent orderEvent) {
-        publishEvent("inventoryUpdateFailedTopic", "inventory-update-failed-sent", orderEvent);
-    }
-
-    public void publishInventoryRollbacked(OrderEvent orderEvent) {
-        publishEvent("inventoryRollbackedTopic", "inventory-rollbacked-sent", orderEvent);
-    }
-
-    public void publishInventoryRollbackFailed(OrderEvent orderEvent) {
-        publishEvent("inventoryRollbackFailedTopic", "inventory-rollback-failed-sent", orderEvent);
+    public void publishOrderFailed(OrderEvent orderEvent) {
+        publishEvent("orderFailedTopic", "order-failed-sent", orderEvent);
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {

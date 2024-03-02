@@ -43,7 +43,7 @@ public class PaymentService {
         } catch (Exception exception) {
             log.error("Saving payment failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.FAILED);
-            eventPublisher.publishPaymentSaveFailed(orderEvent);
+            eventPublisher.publishRollbackChart(orderEvent);
         }
     }
 
@@ -54,12 +54,12 @@ public class PaymentService {
             orderEvent.getOrder().setPaymentCode(savedPayment.getCode());
             orderEvent.getOrder().setTotalPrice(savedPayment.getTotalPrice());
             orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.ROLLBACK);
-            eventPublisher.publishPaymentRollbacked(orderEvent);
+            eventPublisher.publishRollbackChart(orderEvent);
 
         } catch (Exception exception) {
             log.error("Rollbacking payment failed with exception message: {}", exception.getMessage());
             orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.ROLLBACK_FAILED);
-            eventPublisher.publishPaymentRollbackFailed(orderEvent);
+            eventPublisher.publishRollbackChart(orderEvent);
         }
     }
 

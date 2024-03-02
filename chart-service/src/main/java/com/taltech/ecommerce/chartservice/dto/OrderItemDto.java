@@ -1,4 +1,4 @@
-package com.taltech.ecommerce.paymentservice.dto;
+package com.taltech.ecommerce.chartservice.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -6,8 +6,7 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class PaymentItemDto {
-
+public class OrderItemDto {
     private String inventoryCode;
     private Integer quantity;
     private BigDecimal price;

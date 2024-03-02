@@ -6,7 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
-import com.taltech.ecommerce.paymentservice.event.PaymentEvent;
+import com.taltech.ecommerce.paymentservice.event.OrderEvent;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -18,31 +18,31 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PaymentEventPublisher {
 
-    private final KafkaTemplate<String, PaymentEvent> kafkaTemplate;
+    private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
     private final ObservationRegistry observationRegistry;
 
-    public void publishPaymentSaved(PaymentEvent paymentEvent) {
-        publishEvent("paymentSavedTopic", "payment-saved-sent", paymentEvent);
+    public void publishOrderCompleted(OrderEvent orderEvent) {
+        publishEvent("orderCompletedTopic", "payment-saved-sent", orderEvent);
     }
 
-    public void publishPaymentSaveFailed(PaymentEvent paymentEvent) {
-        publishEvent("paymentSaveFailedTopic", "payment-save-failed-sent", paymentEvent);
+    public void publishPaymentSaveFailed(OrderEvent orderEvent) {
+        publishEvent("paymentSaveFailedTopic", "payment-save-failed-sent", orderEvent);
     }
 
-    public void publishPaymentRollbacked(PaymentEvent paymentEvent) {
-        publishEvent("paymentRollbackedTopic", "payment-rollbacked-sent", paymentEvent);
+    public void publishPaymentRollbacked(OrderEvent orderEvent) {
+        publishEvent("paymentRollbackedTopic", "payment-rollbacked-sent", orderEvent);
     }
 
-    public void publishPaymentRollbackFailed(PaymentEvent paymentEvent) {
-        publishEvent("paymentRollbackFailedTopic", "payment-rollback-failed-sent", paymentEvent);
+    public void publishPaymentRollbackFailed(OrderEvent orderEvent) {
+        publishEvent("paymentRollbackFailedTopic", "payment-rollback-failed-sent", orderEvent);
     }
 
-    private void publishEvent(String topic, String observationName, PaymentEvent paymentEvent) {
+    private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {
         log.info("Publishing payment event to '{}'", topic);
 
         try {
             Observation.createNotStarted(observationName, this.observationRegistry).observe(() -> {
-                CompletableFuture<SendResult<String, PaymentEvent>> future = kafkaTemplate.send(topic, paymentEvent);
+                CompletableFuture<SendResult<String, OrderEvent>> future = kafkaTemplate.send(topic, orderEvent);
                 return future.handle((result, throwable) -> CompletableFuture.completedFuture(result));
             });
         } catch (Exception exception) {

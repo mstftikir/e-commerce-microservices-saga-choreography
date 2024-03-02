@@ -3,7 +3,7 @@ package com.taltech.ecommerce.paymentservice.listener;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.taltech.ecommerce.paymentservice.event.PaymentEvent;
+import com.taltech.ecommerce.paymentservice.event.OrderEvent;
 import com.taltech.ecommerce.paymentservice.service.PaymentService;
 
 import io.micrometer.observation.Observation;
@@ -14,26 +14,26 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class PaymentEventListener {
+public class OrderEventListener {
 
     private final PaymentService service;
     private final ObservationRegistry observationRegistry;
 
     @KafkaListener(topics = "savePaymentTopic")
-    public void receiveSavePayment(PaymentEvent paymentEvent) {
+    public void receiveSavePayment(OrderEvent orderEvent) {
         Observation.createNotStarted("save-payment-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Save payment event received");
-                service.commitSave(paymentEvent);
+                log.info("Save order payment event received");
+                service.commitSave(orderEvent);
             });
     }
 
     @KafkaListener(topics = "rollbackPaymentTopic")
-    public void receiveRollbackPayment(PaymentEvent paymentEvent) {
+    public void receiveRollbackPayment(OrderEvent orderEvent) {
         Observation.createNotStarted("rollback-payment-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Rollback payment event received");
-                service.rollbackSave(paymentEvent);
+                log.info("Rollback order payment event received");
+                service.rollbackSave(orderEvent);
             });
     }
 }

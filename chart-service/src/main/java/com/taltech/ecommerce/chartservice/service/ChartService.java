@@ -5,10 +5,11 @@ import java.time.LocalDateTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taltech.ecommerce.chartservice.event.ChartEvent;
+import com.taltech.ecommerce.chartservice.enumeration.EventStatus;
+import com.taltech.ecommerce.chartservice.event.OrderEvent;
 import com.taltech.ecommerce.chartservice.exception.ChartDeleteException;
 import com.taltech.ecommerce.chartservice.model.Chart;
-import com.taltech.ecommerce.chartservice.publisher.ChartEventPublisher;
+import com.taltech.ecommerce.chartservice.publisher.OrderEventPublisher;
 import com.taltech.ecommerce.chartservice.repository.ChartRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -22,25 +23,29 @@ import lombok.extern.slf4j.Slf4j;
 public class ChartService {
 
     private final ChartRepository repository;
-    private final ChartEventPublisher eventPublisher;
+    private final OrderEventPublisher eventPublisher;
 
-    public void commitDelete(ChartEvent chartEvent) {
+    public void commitDelete(OrderEvent orderEvent) {
         try {
-            updateChart("Commit", chartEvent.getUserId());
-            eventPublisher.publishChartDeleted(chartEvent);
+            updateChart("Commit", orderEvent.getOrder().getUserId());
+            orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.SUCCESSFUL);
+            eventPublisher.publishSavePayment(orderEvent);
         } catch (Exception exception) {
             log.error("Deleting chart failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishChartDeleteFailed(chartEvent);
+            orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.FAILED);
+            eventPublisher.publishChartDeleteFailed(orderEvent);
         }
     }
 
-    public void rollbackDelete(ChartEvent chartEvent) {
+    public void rollbackDelete(OrderEvent orderEvent) {
         try {
-            updateChart("Rollback", chartEvent.getUserId());
-            eventPublisher.publishChartRollbacked(chartEvent);
+            updateChart("Rollback", orderEvent.getOrder().getUserId());
+            orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.ROLLBACK);
+            eventPublisher.publishChartRollbacked(orderEvent);
         } catch (Exception exception) {
             log.error("Rollbacking chart failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishChartRollbackFailed(chartEvent);
+            orderEvent.getOrder().getOrderEventStatus().setChartStatus(EventStatus.ROLLBACK_FAILED);
+            eventPublisher.publishChartRollbackFailed(orderEvent);
         }
     }
 

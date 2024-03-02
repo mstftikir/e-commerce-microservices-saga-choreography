@@ -21,8 +21,8 @@ public class OrderEventPublisher {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
     private final ObservationRegistry observationRegistry;
 
-    public void publishInventoryUpdated(OrderEvent orderEvent) {
-        publishEvent("inventoryUpdatedTopic", "inventory-updated-sent", orderEvent);
+    public void publishDeleteChart(OrderEvent orderEvent) {
+        publishEvent("deleteChartTopic", "delete-chart-sent", orderEvent);
     }
 
     public void publishInventoryUpdateFailed(OrderEvent orderEvent) {

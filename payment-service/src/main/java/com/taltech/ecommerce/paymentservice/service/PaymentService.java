@@ -2,16 +2,20 @@ package com.taltech.ecommerce.paymentservice.service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taltech.ecommerce.paymentservice.dto.PaymentDto;
-import com.taltech.ecommerce.paymentservice.event.PaymentEvent;
+import com.taltech.ecommerce.paymentservice.dto.OrderDto;
+import com.taltech.ecommerce.paymentservice.enumeration.EventStatus;
+import com.taltech.ecommerce.paymentservice.event.OrderEvent;
 import com.taltech.ecommerce.paymentservice.exception.PaymentSaveException;
-import com.taltech.ecommerce.paymentservice.mapper.PaymentMapper;
 import com.taltech.ecommerce.paymentservice.model.Payment;
+import com.taltech.ecommerce.paymentservice.model.PaymentItem;
 import com.taltech.ecommerce.paymentservice.publisher.PaymentEventPublisher;
 import com.taltech.ecommerce.paymentservice.repository.PaymentRepository;
 
@@ -26,34 +30,55 @@ import lombok.extern.slf4j.Slf4j;
 public class PaymentService {
 
     private final PaymentRepository repository;
-    private final PaymentMapper mapper;
     private final PaymentEventPublisher eventPublisher;
 
-    public void commitSave(PaymentEvent paymentEvent) {
-        Payment payment = mapper.toModel(paymentEvent.getPayment());
+    public void commitSave(OrderEvent orderEvent) {
+        Payment payment = getPayment(orderEvent);
         try {
             Payment savedPayment = savePayment("Commit", payment);
-            PaymentDto savedPaymentDto = mapper.toDto(savedPayment);
-            paymentEvent.setPayment(savedPaymentDto);
-            eventPublisher.publishPaymentSaved(paymentEvent);
+            orderEvent.getOrder().setPaymentCode(savedPayment.getCode());
+            orderEvent.getOrder().setTotalPrice(savedPayment.getTotalPrice());
+            orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.SUCCESSFUL);
+            eventPublisher.publishOrderCompleted(orderEvent);
         } catch (Exception exception) {
             log.error("Saving payment failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishPaymentSaveFailed(paymentEvent);
+            orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.FAILED);
+            eventPublisher.publishPaymentSaveFailed(orderEvent);
         }
     }
 
-    public void rollbackSave(PaymentEvent paymentEvent) {
-        Payment payment = mapper.toModel(paymentEvent.getPayment());
+    public void rollbackSave(OrderEvent orderEvent) {
+        Payment payment = getPayment(orderEvent);
         try {
             Payment savedPayment = savePayment("Rollback", payment);
-            PaymentDto savedPaymentDto = mapper.toDto(savedPayment);
-            paymentEvent.setPayment(savedPaymentDto);
-            eventPublisher.publishPaymentRollbacked(paymentEvent);
+            orderEvent.getOrder().setPaymentCode(savedPayment.getCode());
+            orderEvent.getOrder().setTotalPrice(savedPayment.getTotalPrice());
+            orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.ROLLBACK);
+            eventPublisher.publishPaymentRollbacked(orderEvent);
 
         } catch (Exception exception) {
             log.error("Rollbacking payment failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishPaymentRollbackFailed(paymentEvent);
+            orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.ROLLBACK_FAILED);
+            eventPublisher.publishPaymentRollbackFailed(orderEvent);
         }
+    }
+
+    private Payment getPayment(OrderEvent orderEvent) {
+        OrderDto order = orderEvent.getOrder();
+        String paymentCode = order.getPaymentCode() == null
+            ? UUID.randomUUID().toString()
+            : order.getPaymentCode();
+        List<PaymentItem> paymentItems = new ArrayList<>();
+        order.getOrderItems().forEach(orderItem -> paymentItems.add(PaymentItem.builder()
+            .inventoryCode(orderItem.getInventoryCode())
+            .quantity(orderItem.getQuantity())
+            .price(orderItem.getPrice())
+            .build()));
+        return Payment.builder()
+            .code(paymentCode)
+            .userId(order.getUserId())
+            .paymentItems(paymentItems)
+            .build();
     }
 
     private Payment savePayment(String action, Payment payment) {

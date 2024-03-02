@@ -1,6 +1,6 @@
 package com.taltech.ecommerce.paymentservice.event;
 
-import com.taltech.ecommerce.paymentservice.dto.PaymentDto;
+import com.taltech.ecommerce.paymentservice.dto.OrderDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class PaymentEvent {
+public class OrderEvent {
 
-    private String eventId;
-    private PaymentDto payment;
+    private OrderDto order;
 }

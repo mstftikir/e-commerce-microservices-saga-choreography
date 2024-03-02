@@ -19,7 +19,7 @@ public class OrderEventListener {
     private final OrderService service;
     private final ObservationRegistry observationRegistry;
 
-    @KafkaListener(topics = "orderCompleted")
+    @KafkaListener(topics = "orderCompletedTopic")
     public void receiveOrderCompleted(OrderEvent event) {
         Observation.createNotStarted("order-completed-received", this.observationRegistry)
             .observe(() -> {
@@ -28,7 +28,7 @@ public class OrderEventListener {
             });
     }
 
-    @KafkaListener(topics = "orderFailed")
+    @KafkaListener(topics = "orderFailedTopic")
     public void receiveOrderFailed(OrderEvent event) {
         Observation.createNotStarted("order-failed-received", this.observationRegistry)
             .observe(() -> {

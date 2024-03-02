@@ -11,7 +11,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import com.taltech.ecommerce.orderservice.dto.OrderDto;
 import com.taltech.ecommerce.orderservice.dto.user.UserDto;
-import com.taltech.ecommerce.orderservice.enumeration.EventStatus;
 import com.taltech.ecommerce.orderservice.event.OrderEvent;
 import com.taltech.ecommerce.orderservice.mapper.OrderMapper;
 import com.taltech.ecommerce.orderservice.model.Order;
@@ -57,10 +56,16 @@ public class OrderService {
     }
 
     public void orderCompleted(OrderEvent orderEvent) {
-        Order order = findOrderByEventId(orderEvent.getOrder().getOrderEventStatus().getId());
-        order.getOrderEventStatus().setPaymentStatus(EventStatus.SUCCESSFUL);
+        Order receivedOrder = mapper.toModel(orderEvent.getOrder());
+        Order order = findOrderByEventId(receivedOrder.getOrderEventStatus().getId());
+
         order.setPaymentCode(orderEvent.getOrder().getPaymentCode());
         order.setTotalPrice(orderEvent.getOrder().getTotalPrice());
+
+        order.getOrderEventStatus().setInventoryStatus(receivedOrder.getOrderEventStatus().getInventoryStatus());
+        order.getOrderEventStatus().setChartStatus(receivedOrder.getOrderEventStatus().getChartStatus());
+        order.getOrderEventStatus().setPaymentStatus(receivedOrder.getOrderEventStatus().getPaymentStatus());
+
         repository.saveAndFlush(order);
     }
 

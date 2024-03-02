@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.taltech.ecommerce.inventoryservice.enumeration.EventStatus;
 import com.taltech.ecommerce.inventoryservice.event.OrderEvent;
 import com.taltech.ecommerce.inventoryservice.exception.InventoryLimitException;
 import com.taltech.ecommerce.inventoryservice.model.Inventory;
@@ -29,24 +30,28 @@ public class InventoryService {
     public void commitUpdate(OrderEvent orderEvent) {
         List<Inventory> inventoryList = getInventories(orderEvent);
         try {
-            List<Inventory> updatedInventoryList = updateInventories("Commit", inventoryList);
-            //Sends the event to Chart
+            updateInventories("Commit", inventoryList);
+            orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.SUCCESSFUL);
+            eventPublisher.publishDeleteChart(orderEvent);
         }
         catch (Exception exception) {
             log.error("Updating inventory failed with exception message: {}", exception.getMessage());
-            //Sends fail the event to Order
+            orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.FAILED);
+            eventPublisher.publishInventoryUpdateFailed(orderEvent);
         }
     }
 
     public void rollbackUpdate(OrderEvent orderEvent) {
         List<Inventory> inventoryList = getInventories(orderEvent);
         try {
-            List<Inventory> updatedInventoryList = updateInventories("Rollback", inventoryList);
-            //Sends fail to the order Order
+            updateInventories("Rollback", inventoryList);
+            orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.ROLLBACK);
+            eventPublisher.publishInventoryRollbacked(orderEvent);
         }
         catch (Exception exception) {
             log.error("Rollbacking inventory failed with exception message: {}", exception.getMessage());
-            //Sends fail the event to Order
+            orderEvent.getOrder().getOrderEventStatus().setInventoryStatus(EventStatus.ROLLBACK_FAILED);
+            eventPublisher.publishInventoryRollbackFailed(orderEvent);
         }
     }
 
@@ -61,7 +66,7 @@ public class InventoryService {
         return inventoryList;
     }
 
-    private List<Inventory> updateInventories(String action, List<Inventory> inventoryList) {
+    private void updateInventories(String action, List<Inventory> inventoryList) {
         List<Inventory> foundInventoryList = findByCode(action, inventoryList);
 
         isInStock(action, foundInventoryList);
@@ -91,7 +96,7 @@ public class InventoryService {
             foundInventory.setUpdateDate(LocalDateTime.now());
         });
 
-        return repository.saveAllAndFlush(foundInventoryList);
+        repository.saveAllAndFlush(foundInventoryList);
     }
 
     private List<Inventory> findByCode(String action, List<Inventory> receivedInventoryList) {

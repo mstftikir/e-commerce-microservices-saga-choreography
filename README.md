@@ -1,5 +1,5 @@
-# E-Commerce Microservices using Saga Orchestration Pattern
-This repository contains the E-Commerce microservices using Saga Orchestration pattern for data consistency.
+# E-Commerce Microservices using Saga Choreography Pattern
+This repository contains the E-Commerce microservices using Saga Choreography pattern for data consistency.
 
 ## How to run the application using Docker
 

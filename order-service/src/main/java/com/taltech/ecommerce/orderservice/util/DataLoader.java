@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.taltech.ecommerce.orderservice.enumeration.EventStatus;
 import com.taltech.ecommerce.orderservice.model.Order;
-import com.taltech.ecommerce.orderservice.model.OrderEvent;
+import com.taltech.ecommerce.orderservice.model.OrderEventStatus;
 import com.taltech.ecommerce.orderservice.model.OrderItem;
 import com.taltech.ecommerce.orderservice.repository.OrderRepository;
 
@@ -41,10 +41,10 @@ public class DataLoader implements CommandLineRunner {
             orderItem2.setUpdateDate(LocalDateTime.now());
 
             Order order = new Order();
-            OrderEvent orderEvent = new OrderEvent();
-            orderEvent.setId(UUID.randomUUID().toString());
-            orderEvent.setInventoryStatus(EventStatus.SUCCESSFUL);
-            order.setOrderEvent(orderEvent);
+            OrderEventStatus orderEventStatus = new OrderEventStatus();
+            orderEventStatus.setId(UUID.randomUUID().toString());
+            orderEventStatus.setInventoryStatus(EventStatus.SUCCESSFUL);
+            order.setOrderEventStatus(orderEventStatus);
             order.setUserId(12345L);
             order.setOrderItems(List.of(orderItem, orderItem2));
             order.setPaymentCode(UUID.randomUUID().toString());
@@ -69,10 +69,10 @@ public class DataLoader implements CommandLineRunner {
             orderItem4.setUpdateDate(LocalDateTime.now());
 
             Order order2 = new Order();
-            OrderEvent orderEvent2 = new OrderEvent();
-            orderEvent2.setId(UUID.randomUUID().toString());
-            orderEvent2.setInventoryStatus(EventStatus.SUCCESSFUL);
-            order2.setOrderEvent(orderEvent2);
+            OrderEventStatus orderEventStatus2 = new OrderEventStatus();
+            orderEventStatus2.setId(UUID.randomUUID().toString());
+            orderEventStatus2.setInventoryStatus(EventStatus.SUCCESSFUL);
+            order2.setOrderEventStatus(orderEventStatus2);
             order2.setUserId(67890L);
             order2.setOrderItems(List.of(orderItem3, orderItem4));
             order2.setPaymentCode(UUID.randomUUID().toString());

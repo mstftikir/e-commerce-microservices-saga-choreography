@@ -1,17 +1,16 @@
 package com.taltech.ecommerce.inventoryservice.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.taltech.ecommerce.inventoryservice.dto.InventoryDto;
-import com.taltech.ecommerce.inventoryservice.event.InventoryEvent;
+import com.taltech.ecommerce.inventoryservice.event.OrderEvent;
 import com.taltech.ecommerce.inventoryservice.exception.InventoryLimitException;
-import com.taltech.ecommerce.inventoryservice.mapper.InventoryMapper;
 import com.taltech.ecommerce.inventoryservice.model.Inventory;
-import com.taltech.ecommerce.inventoryservice.publisher.InventoryEventPublisher;
+import com.taltech.ecommerce.inventoryservice.publisher.OrderEventPublisher;
 import com.taltech.ecommerce.inventoryservice.repository.InventoryRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,35 +24,41 @@ import lombok.extern.slf4j.Slf4j;
 public class InventoryService {
 
     private final InventoryRepository repository;
-    private final InventoryMapper mapper;
-    private final InventoryEventPublisher eventPublisher;
+    private final OrderEventPublisher eventPublisher;
 
-    public void commitUpdate(InventoryEvent inventoryEvent) {
-        List<Inventory> inventoryList = mapper.toModelList(inventoryEvent.getInventoryList());
+    public void commitUpdate(OrderEvent orderEvent) {
+        List<Inventory> inventoryList = getInventories(orderEvent);
         try {
             List<Inventory> updatedInventoryList = updateInventories("Commit", inventoryList);
-            List<InventoryDto> updatedInventoryDtoList = mapper.toDtoList(updatedInventoryList);
-            inventoryEvent.setInventoryList(updatedInventoryDtoList);
-            eventPublisher.publishInventoryUpdated(inventoryEvent);
+            //Sends the event to Chart
         }
         catch (Exception exception) {
             log.error("Updating inventory failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishInventoryUpdateFailed(inventoryEvent);
+            //Sends fail the event to Order
         }
     }
 
-    public void rollbackUpdate(InventoryEvent inventoryEvent) {
-        List<Inventory> inventoryList = mapper.toModelList(inventoryEvent.getInventoryList());
+    public void rollbackUpdate(OrderEvent orderEvent) {
+        List<Inventory> inventoryList = getInventories(orderEvent);
         try {
             List<Inventory> updatedInventoryList = updateInventories("Rollback", inventoryList);
-            List<InventoryDto> updatedInventoryDtoList = mapper.toDtoList(updatedInventoryList);
-            inventoryEvent.setInventoryList(updatedInventoryDtoList);
-            eventPublisher.publishInventoryRollbacked(inventoryEvent);
+            //Sends fail to the order Order
         }
         catch (Exception exception) {
             log.error("Rollbacking inventory failed with exception message: {}", exception.getMessage());
-            eventPublisher.publishInventoryRollbackFailed(inventoryEvent);
+            //Sends fail the event to Order
         }
+    }
+
+    private List<Inventory> getInventories(OrderEvent orderEvent) {
+        List<Inventory> inventoryList = new ArrayList<>();
+        orderEvent.getOrder().getOrderItems()
+            .forEach(orderItem -> inventoryList.add(Inventory.builder()
+                .code(orderItem.getInventoryCode())
+                .quantity(orderItem.getQuantity())
+                .build())
+            );
+        return inventoryList;
     }
 
     private List<Inventory> updateInventories(String action, List<Inventory> inventoryList) {

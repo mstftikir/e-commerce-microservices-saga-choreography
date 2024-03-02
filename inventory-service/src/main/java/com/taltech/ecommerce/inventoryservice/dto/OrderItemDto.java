@@ -6,11 +6,8 @@ import java.time.LocalDateTime;
 import lombok.Data;
 
 @Data
-public class InventoryDto {
-
-    private String code;
-    private String name;
-    private String description;
+public class OrderItemDto {
+    private String inventoryCode;
     private Integer quantity;
     private BigDecimal price;
     private LocalDateTime insertDate;

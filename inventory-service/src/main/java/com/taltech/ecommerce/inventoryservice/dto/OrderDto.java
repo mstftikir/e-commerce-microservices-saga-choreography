@@ -1,4 +1,4 @@
-package com.taltech.ecommerce.orderservice.dto;
+package com.taltech.ecommerce.inventoryservice.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -8,7 +8,6 @@ import lombok.Data;
 
 @Data
 public class OrderDto {
-
     private OrderEventStatusDto orderEventStatus;
     private Long userId;
     private List<OrderItemDto> orderItems;

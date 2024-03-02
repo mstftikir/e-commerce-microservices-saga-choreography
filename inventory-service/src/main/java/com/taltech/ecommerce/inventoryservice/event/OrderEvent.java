@@ -1,8 +1,6 @@
 package com.taltech.ecommerce.inventoryservice.event;
 
-import java.util.List;
-
-import com.taltech.ecommerce.inventoryservice.dto.InventoryDto;
+import com.taltech.ecommerce.inventoryservice.dto.OrderDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,8 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class InventoryEvent {
+public class OrderEvent {
 
-    private String eventId;
-    private List<InventoryDto> inventoryList;
+    private OrderDto order;
 }

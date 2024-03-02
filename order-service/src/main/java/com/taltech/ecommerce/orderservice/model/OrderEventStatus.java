@@ -19,7 +19,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderEvent {
+public class OrderEventStatus {
     @Id
     private String id;
     @Version

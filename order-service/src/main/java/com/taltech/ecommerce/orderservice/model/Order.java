@@ -33,7 +33,7 @@ public class Order {
     private Long version;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_id", referencedColumnName = "id")
-    private OrderEvent orderEvent;
+    private OrderEventStatus orderEventStatus;
     private Long userId;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;

@@ -8,5 +8,5 @@ import com.taltech.ecommerce.orderservice.model.Order;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
-    Optional<Order> findByOrderEventId(String eventId);
+    Optional<Order> findByOrderEventStatusId(String eventId);
 }

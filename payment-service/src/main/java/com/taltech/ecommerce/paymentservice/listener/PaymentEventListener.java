@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderEventListener {
+public class PaymentEventListener {
 
     private final PaymentService service;
     private final ObservationRegistry observationRegistry;

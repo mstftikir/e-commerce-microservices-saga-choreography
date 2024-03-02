@@ -11,7 +11,7 @@ import com.taltech.ecommerce.inventoryservice.enumeration.EventStatus;
 import com.taltech.ecommerce.inventoryservice.event.OrderEvent;
 import com.taltech.ecommerce.inventoryservice.exception.InventoryLimitException;
 import com.taltech.ecommerce.inventoryservice.model.Inventory;
-import com.taltech.ecommerce.inventoryservice.publisher.OrderEventPublisher;
+import com.taltech.ecommerce.inventoryservice.publisher.InventoryEventPublisher;
 import com.taltech.ecommerce.inventoryservice.repository.InventoryRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,7 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 public class InventoryService {
 
     private final InventoryRepository repository;
-    private final OrderEventPublisher eventPublisher;
+    private final InventoryEventPublisher eventPublisher;
 
     public void commitUpdate(OrderEvent orderEvent) {
         List<Inventory> inventoryList = getInventories(orderEvent);

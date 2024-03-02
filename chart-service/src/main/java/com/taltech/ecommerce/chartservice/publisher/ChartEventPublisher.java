@@ -1,4 +1,4 @@
-package com.taltech.ecommerce.inventoryservice.publisher;
+package com.taltech.ecommerce.chartservice.publisher;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -6,7 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 
-import com.taltech.ecommerce.inventoryservice.event.OrderEvent;
+import com.taltech.ecommerce.chartservice.event.OrderEvent;
 
 import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
@@ -16,29 +16,29 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class OrderEventPublisher {
+public class ChartEventPublisher {
 
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
     private final ObservationRegistry observationRegistry;
 
-    public void publishDeleteChart(OrderEvent orderEvent) {
-        publishEvent("deleteChartTopic", "delete-chart-sent", orderEvent);
+    public void publishSavePayment(OrderEvent orderEvent) {
+        publishEvent("savePaymentTopic", "save-payment-sent", orderEvent);
     }
 
-    public void publishInventoryUpdateFailed(OrderEvent orderEvent) {
-        publishEvent("inventoryUpdateFailedTopic", "inventory-update-failed-sent", orderEvent);
+    public void publishChartDeleteFailed(OrderEvent orderEvent) {
+        publishEvent("chartDeleteFailedTopic", "chart-delete-failed-sent", orderEvent);
     }
 
-    public void publishInventoryRollbacked(OrderEvent orderEvent) {
-        publishEvent("inventoryRollbackedTopic", "inventory-rollbacked-sent", orderEvent);
+    public void publishChartRollbacked(OrderEvent orderEvent) {
+        publishEvent("chartRollbackedTopic", "chart-rollbacked-sent", orderEvent);
     }
 
-    public void publishInventoryRollbackFailed(OrderEvent orderEvent) {
-        publishEvent("inventoryRollbackFailedTopic", "inventory-rollback-failed-sent", orderEvent);
+    public void publishChartRollbackFailed(OrderEvent orderEvent) {
+        publishEvent("chartRollbackFailedTopic", "chart-rollback-failed-sent", orderEvent);
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {
-        log.info("Publishing inventory event to '{}'", topic);
+        log.info("Publishing chart event to '{}'", topic);
 
         try {
             Observation.createNotStarted(observationName, this.observationRegistry).observe(() -> {
@@ -50,4 +50,3 @@ public class OrderEventPublisher {
         }
     }
 }
-

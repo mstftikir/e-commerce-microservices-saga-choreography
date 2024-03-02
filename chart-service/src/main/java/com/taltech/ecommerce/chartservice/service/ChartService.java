@@ -9,7 +9,7 @@ import com.taltech.ecommerce.chartservice.enumeration.EventStatus;
 import com.taltech.ecommerce.chartservice.event.OrderEvent;
 import com.taltech.ecommerce.chartservice.exception.ChartDeleteException;
 import com.taltech.ecommerce.chartservice.model.Chart;
-import com.taltech.ecommerce.chartservice.publisher.OrderEventPublisher;
+import com.taltech.ecommerce.chartservice.publisher.ChartEventPublisher;
 import com.taltech.ecommerce.chartservice.repository.ChartRepository;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ChartService {
 
     private final ChartRepository repository;
-    private final OrderEventPublisher eventPublisher;
+    private final ChartEventPublisher eventPublisher;
 
     public void commitDelete(OrderEvent orderEvent) {
         try {

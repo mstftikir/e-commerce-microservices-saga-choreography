@@ -21,12 +21,12 @@ public class OrderEventPublisher {
     private final KafkaTemplate<String, OrderEvent> kafkaTemplate;
     private final ObservationRegistry observationRegistry;
 
-    public void publishUpdateInventory(OrderEvent event) {
-        log.info("Publishing order event to 'updateInventoryTopic'");
+    public void publishUpdateInventory(OrderEvent orderEvent) {
+        log.info("Publishing order event '{}' to 'updateInventoryTopic'", orderEvent.getOrder().getOrderEventStatus().getId());
 
         try {
             Observation.createNotStarted("update-inventory-sent", this.observationRegistry).observe(() -> {
-                CompletableFuture<SendResult<String, OrderEvent>> future = kafkaTemplate.send("updateInventoryTopic", event);
+                CompletableFuture<SendResult<String, OrderEvent>> future = kafkaTemplate.send("updateInventoryTopic", orderEvent);
                 return future.handle((result, throwable) -> CompletableFuture.completedFuture(result));
             });
         } catch (Exception exception) {

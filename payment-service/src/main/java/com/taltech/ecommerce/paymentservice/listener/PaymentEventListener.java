@@ -23,7 +23,7 @@ public class PaymentEventListener {
     public void receiveSavePayment(OrderEvent orderEvent) {
         Observation.createNotStarted("save-payment-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Save order payment event received");
+                log.info("Save order payment event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.commitSave(orderEvent);
             });
     }
@@ -32,7 +32,7 @@ public class PaymentEventListener {
     public void receiveRollbackPayment(OrderEvent orderEvent) {
         Observation.createNotStarted("rollback-payment-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Rollback order payment event received");
+                log.info("Rollback order payment event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.rollbackSave(orderEvent);
             });
     }

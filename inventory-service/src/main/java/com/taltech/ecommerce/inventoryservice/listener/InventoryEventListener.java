@@ -23,7 +23,7 @@ public class InventoryEventListener {
     public void receiveUpdateInventory(OrderEvent orderEvent) {
         Observation.createNotStarted("update-inventory-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Update inventory event received");
+                log.info("Update inventory event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.commitUpdate(orderEvent);
             });
     }
@@ -32,7 +32,7 @@ public class InventoryEventListener {
     public void receiveRollbackInventory(OrderEvent orderEvent) {
         Observation.createNotStarted("rollback-inventory-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Rollback inventory event received");
+                log.info("Rollback inventory event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.rollbackUpdate(orderEvent);
             });
     }

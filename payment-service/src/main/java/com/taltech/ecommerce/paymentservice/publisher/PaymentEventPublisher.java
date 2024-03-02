@@ -38,7 +38,7 @@ public class PaymentEventPublisher {
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {
-        log.info("Publishing payment event to '{}'", topic);
+        log.info("Publishing payment event '{}' to '{}'", topic, orderEvent.getOrder().getOrderEventStatus().getId());
 
         try {
             Observation.createNotStarted(observationName, this.observationRegistry).observe(() -> {

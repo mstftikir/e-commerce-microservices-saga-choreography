@@ -38,7 +38,7 @@ public class InventoryEventPublisher {
     }
 
     private void publishEvent(String topic, String observationName, OrderEvent orderEvent) {
-        log.info("Publishing inventory event to '{}'", topic);
+        log.info("Publishing inventory event '{}' to '{}'", topic, orderEvent.getOrder().getOrderEventStatus().getId());
 
         try {
             Observation.createNotStarted(observationName, this.observationRegistry).observe(() -> {

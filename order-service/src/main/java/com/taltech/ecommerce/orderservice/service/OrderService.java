@@ -51,7 +51,6 @@ public class OrderService {
         addDates(order);
         repository.save(order);
 
-        log.info("Publishing events with eventId '{}'", order.getOrderEventStatus().getId());
         startOrder(order);
     }
 

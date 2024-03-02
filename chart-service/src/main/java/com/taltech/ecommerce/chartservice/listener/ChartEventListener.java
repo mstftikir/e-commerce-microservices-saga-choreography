@@ -23,7 +23,7 @@ public class ChartEventListener {
     public void receiveDeleteChart(OrderEvent orderEvent) {
         Observation.createNotStarted("delete-chart-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Delete chart event received");
+                log.info("Delete chart event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.commitDelete(orderEvent);
             });
     }
@@ -32,7 +32,7 @@ public class ChartEventListener {
     public void receiveRollbackChart(OrderEvent orderEvent) {
         Observation.createNotStarted("rollback-chart-received", this.observationRegistry)
             .observe(() -> {
-                log.info("Rollback chart event received");
+                log.info("Rollback chart event '{}' received", orderEvent.getOrder().getOrderEventStatus().getId());
                 service.rollbackDelete(orderEvent);
             });
     }

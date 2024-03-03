@@ -29,6 +29,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PaymentService {
 
+    private static final List<Long> NOT_ALLOWED_USERS = List.of(99999L);
+
     private final PaymentRepository repository;
     private final PaymentEventPublisher eventPublisher;
 
@@ -82,6 +84,8 @@ public class PaymentService {
     }
 
     private Payment savePayment(String action, Payment payment) {
+        validate(payment);
+
         log.info("{} - Saving the payment for userId '{}' and code '{}'",
             action,
             payment.getUserId(),
@@ -114,6 +118,14 @@ public class PaymentService {
                 payment.getUserId(),
                 payment.getCode()));
         }
+    }
+
+    private static void validate(Payment payment) {
+        NOT_ALLOWED_USERS.forEach(notAllowedUser -> {
+            if(notAllowedUser.equals(payment.getUserId())) {
+                throw new PaymentSaveException(String.format("Payments are not allowed for user '%s'", payment.getUserId()));
+            }
+        });
     }
 
     private void setPaymentActive(Payment payment, boolean active) {

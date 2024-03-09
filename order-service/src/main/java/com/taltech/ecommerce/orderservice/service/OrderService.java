@@ -64,6 +64,7 @@ public class OrderService {
         order.getOrderEventStatus().setInventoryStatus(receivedOrder.getOrderEventStatus().getInventoryStatus());
         order.getOrderEventStatus().setChartStatus(receivedOrder.getOrderEventStatus().getChartStatus());
         order.getOrderEventStatus().setPaymentStatus(receivedOrder.getOrderEventStatus().getPaymentStatus());
+        order.setUpdateDate(LocalDateTime.now());
 
         repository.saveAndFlush(order);
     }
@@ -75,6 +76,7 @@ public class OrderService {
         order.getOrderEventStatus().setInventoryStatus(receivedOrder.getOrderEventStatus().getInventoryStatus());
         order.getOrderEventStatus().setChartStatus(receivedOrder.getOrderEventStatus().getChartStatus());
         order.getOrderEventStatus().setPaymentStatus(receivedOrder.getOrderEventStatus().getPaymentStatus());
+        order.setUpdateDate(LocalDateTime.now());
 
         repository.saveAndFlush(order);
     }

@@ -19,7 +19,8 @@ public class DataLoader implements CommandLineRunner {
     private final ChartRepository chartRepository;
     @Override
     public void run(String... args) {
-        if (chartRepository.count() < 1) {
+        if (chartRepository.count() < 2) {
+            // Chart 1
             ChartItem chartItem = new ChartItem();
             chartItem.setInventoryCode("iphone_13");
             chartItem.setPrice(new BigDecimal(1000));
@@ -44,6 +45,33 @@ public class DataLoader implements CommandLineRunner {
             chart.setInsertDate(LocalDateTime.now());
             chart.setUpdateDate(LocalDateTime.now());
             chartRepository.save(chart);
+
+            // Chart 2
+            ChartItem chartItem3 = new ChartItem();
+            chartItem3.setInventoryCode("iphone_13");
+            chartItem3.setPrice(new BigDecimal(1000));
+            chartItem3.setQuantity(2);
+            chartItem3.setActive(true);
+            chartItem3.setInsertDate(LocalDateTime.now());
+            chartItem3.setUpdateDate(LocalDateTime.now());
+
+            ChartItem chartItem4 = new ChartItem();
+            chartItem4.setInventoryCode("samsung_a12");
+            chartItem4.setPrice(new BigDecimal(800));
+            chartItem4.setQuantity(2);
+            chartItem4.setActive(true);
+            chartItem4.setInsertDate(LocalDateTime.now());
+            chartItem4.setUpdateDate(LocalDateTime.now());
+
+            Chart chart2 = new Chart();
+            chart2.setUserId(99999L);
+            chart2.setChartItems(List.of(chartItem3, chartItem4));
+            chart2.setTotalPrice(new BigDecimal(3600));
+            chart2.setActive(true);
+            chart2.setInsertDate(LocalDateTime.now());
+            chart2.setUpdateDate(LocalDateTime.now());
+
+            chartRepository.saveAll(List.of(chart, chart2));
         }
     }
 }

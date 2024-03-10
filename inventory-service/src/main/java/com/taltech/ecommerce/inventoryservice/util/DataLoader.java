@@ -22,7 +22,7 @@ public class DataLoader implements CommandLineRunner {
             inventory.setCode("iphone_13");
             inventory.setName("Iphone 13");
             inventory.setDescription("Iphone 13 series");
-            inventory.setQuantity(100);
+            inventory.setQuantity(100000000);
             inventory.setPrice(new BigDecimal(1000));
             inventory.setInsertDate(LocalDateTime.now());
             inventory.setUpdateDate(LocalDateTime.now());
@@ -31,7 +31,7 @@ public class DataLoader implements CommandLineRunner {
             inventory1.setCode("samsung_a12");
             inventory1.setName("Samsung A12");
             inventory1.setDescription("Samsung A series");
-            inventory1.setQuantity(200);
+            inventory1.setQuantity(100000000);
             inventory1.setPrice(new BigDecimal(800));
             inventory1.setInsertDate(LocalDateTime.now());
             inventory1.setUpdateDate(LocalDateTime.now());

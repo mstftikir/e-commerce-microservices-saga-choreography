@@ -55,7 +55,7 @@ public class DataLoader implements CommandLineRunner {
             user2.setId(99999L);
             user2.setName("Tarkan");
             user2.setSurname("Tevetoglu");
-            user2.setEmailAddress("daft.punk@email.com");
+            user2.setEmailAddress("tarkan.tevetoglu@email.com");
             user2.setUserAddresses(List.of(userAddress1));
             user2.setInsertDate(LocalDateTime.now());
             user2.setUpdateDate(LocalDateTime.now());

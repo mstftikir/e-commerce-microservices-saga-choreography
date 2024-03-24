@@ -24,14 +24,14 @@ public class DataLoader implements CommandLineRunner {
             //Payment 1
             PaymentItem paymentItem = new PaymentItem();
             paymentItem.setInventoryCode("iphone_13");
-            paymentItem.setQuantity(1);
+            paymentItem.setQuantity(new BigDecimal(1));
             paymentItem.setPrice(new BigDecimal(1000));
             paymentItem.setInsertDate(LocalDateTime.now());
             paymentItem.setUpdateDate(LocalDateTime.now());
 
             PaymentItem paymentItem2 = new PaymentItem();
             paymentItem2.setInventoryCode("samsung_a12");
-            paymentItem2.setQuantity(1);
+            paymentItem2.setQuantity(new BigDecimal(1));
             paymentItem2.setPrice(new BigDecimal(800));
             paymentItem2.setInsertDate(LocalDateTime.now());
             paymentItem2.setUpdateDate(LocalDateTime.now());
@@ -49,14 +49,14 @@ public class DataLoader implements CommandLineRunner {
             //Payment 2
             PaymentItem paymentItem3 = new PaymentItem();
             paymentItem3.setInventoryCode("iphone_13");
-            paymentItem3.setQuantity(2);
+            paymentItem3.setQuantity(new BigDecimal(2));
             paymentItem3.setPrice(new BigDecimal(1000));
             paymentItem3.setInsertDate(LocalDateTime.now());
             paymentItem3.setUpdateDate(LocalDateTime.now());
 
             PaymentItem paymentItem4 = new PaymentItem();
             paymentItem4.setInventoryCode("samsung_a12");
-            paymentItem4.setQuantity(2);
+            paymentItem4.setQuantity(new BigDecimal(2));
             paymentItem4.setPrice(new BigDecimal(800));
             paymentItem4.setInsertDate(LocalDateTime.now());
             paymentItem4.setUpdateDate(LocalDateTime.now());

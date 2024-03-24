@@ -28,14 +28,14 @@ public class DataLoader implements CommandLineRunner {
             //Order 1
             OrderItem orderItem = new OrderItem();
             orderItem.setInventoryCode("iphone_13");
-            orderItem.setQuantity(1);
+            orderItem.setQuantity(new BigDecimal(1));
             orderItem.setPrice(new BigDecimal(1000));
             orderItem.setInsertDate(LocalDateTime.now());
             orderItem.setUpdateDate(LocalDateTime.now());
 
             OrderItem orderItem2 = new OrderItem();
             orderItem2.setInventoryCode("samsung_a12");
-            orderItem2.setQuantity(1);
+            orderItem2.setQuantity(new BigDecimal(1));
             orderItem2.setPrice(new BigDecimal(800));
             orderItem2.setInsertDate(LocalDateTime.now());
             orderItem2.setUpdateDate(LocalDateTime.now());
@@ -56,14 +56,14 @@ public class DataLoader implements CommandLineRunner {
             //Order 2
             OrderItem orderItem3 = new OrderItem();
             orderItem3.setInventoryCode("iphone_13");
-            orderItem3.setQuantity(2);
+            orderItem3.setQuantity(new BigDecimal(2));
             orderItem3.setPrice(new BigDecimal(1000));
             orderItem3.setInsertDate(LocalDateTime.now());
             orderItem3.setUpdateDate(LocalDateTime.now());
 
             OrderItem orderItem4 = new OrderItem();
             orderItem4.setInventoryCode("samsung_a12");
-            orderItem4.setQuantity(2);
+            orderItem4.setQuantity(new BigDecimal(2));
             orderItem4.setPrice(new BigDecimal(800));
             orderItem4.setInsertDate(LocalDateTime.now());
             orderItem4.setUpdateDate(LocalDateTime.now());

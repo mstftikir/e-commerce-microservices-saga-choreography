@@ -27,7 +27,7 @@ public class OrderItem {
     @Version
     private Long version;
     private String inventoryCode;
-    private Integer quantity;
+    private BigDecimal quantity;
     private BigDecimal price;
     private LocalDateTime insertDate;
     private LocalDateTime updateDate;

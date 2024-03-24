@@ -1,5 +1,6 @@
 package com.taltech.ecommerce.inventoryservice.service;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,19 +73,19 @@ public class InventoryService {
         isInStock(action, foundInventoryList);
 
         foundInventoryList.forEach(foundInventory -> {
-            Integer receivedQuantity = inventoryList.stream().filter(inventory -> inventory.getCode().equals(foundInventory.getCode()))
+            BigDecimal receivedQuantity = inventoryList.stream().filter(inventory -> inventory.getCode().equals(foundInventory.getCode()))
                 .map(Inventory::getQuantity)
                 .findAny()
                 .orElseThrow(EntityNotFoundException::new);
-            Integer foundQuantity = foundInventory.getQuantity();
-            int calculatedQuantity;
+            BigDecimal foundQuantity = foundInventory.getQuantity();
+            BigDecimal calculatedQuantity;
 
             if(action.equals("Rollback")){
-                calculatedQuantity = foundQuantity + receivedQuantity;
+                calculatedQuantity = foundQuantity.add(receivedQuantity);
             }
             else {
-                calculatedQuantity = foundQuantity - receivedQuantity;
-                if (calculatedQuantity < 0) {
+                calculatedQuantity = foundQuantity.subtract(receivedQuantity);
+                if (calculatedQuantity.compareTo(BigDecimal.ZERO) < 0) {
                     throw new InventoryLimitException(String.format("%s - Received inventory quantity '%s' is more than found inventory quantity '%s'",
                         action,
                         receivedQuantity,
@@ -114,7 +115,7 @@ public class InventoryService {
 
     private void isInStock(String action, List<Inventory> inventoryList) {
         inventoryList.forEach(inventory -> {
-            if(inventory.getQuantity() != null && inventory.getQuantity() <= 0) {
+            if(inventory.getQuantity() != null && inventory.getQuantity().compareTo(BigDecimal.ZERO) <= 0) {
                 throw new EntityNotFoundException(String.format("%s - Not enough quantity '%s' for inventory item code '%s'",
                     action,
                     inventory.getQuantity(),

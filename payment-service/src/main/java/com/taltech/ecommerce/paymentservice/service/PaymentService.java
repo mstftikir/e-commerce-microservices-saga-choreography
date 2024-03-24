@@ -135,7 +135,7 @@ public class PaymentService {
 
     private void calculateTotalPrice(Payment payment) {
         AtomicReference<BigDecimal> totalPrice = new AtomicReference<>(BigDecimal.ZERO);
-        payment.getPaymentItems().forEach(paymentItem -> totalPrice.updateAndGet(t -> t.add(paymentItem.getPrice().multiply(new BigDecimal(paymentItem.getQuantity())))));
+        payment.getPaymentItems().forEach(paymentItem -> totalPrice.updateAndGet(t -> t.add(paymentItem.getPrice().multiply(paymentItem.getQuantity()))));
         payment.setTotalPrice(totalPrice.get());
     }
 

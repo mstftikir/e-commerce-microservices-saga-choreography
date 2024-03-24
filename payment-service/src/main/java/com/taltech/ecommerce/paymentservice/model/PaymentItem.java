@@ -26,7 +26,7 @@ public class PaymentItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String inventoryCode;
-    private Integer quantity;
+    private BigDecimal quantity;
     private BigDecimal price;
     private boolean active;
     private LocalDateTime insertDate;

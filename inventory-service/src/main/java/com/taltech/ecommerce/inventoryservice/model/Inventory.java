@@ -29,7 +29,7 @@ public class Inventory {
     private String code;
     private String name;
     private String description;
-    private Integer quantity;
+    private BigDecimal quantity;
     private BigDecimal price;
     private LocalDateTime insertDate;
     private LocalDateTime updateDate;

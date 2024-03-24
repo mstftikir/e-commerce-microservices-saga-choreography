@@ -39,7 +39,6 @@ public class PaymentService {
         try {
             Payment savedPayment = savePayment("Commit", payment);
             orderEvent.getOrder().setPaymentCode(savedPayment.getCode());
-            orderEvent.getOrder().setTotalPrice(savedPayment.getTotalPrice());
             orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.SUCCESSFUL);
             eventPublisher.publishOrderCompleted(orderEvent);
         } catch (Exception exception) {
@@ -54,7 +53,6 @@ public class PaymentService {
         try {
             Payment savedPayment = savePayment("Rollback", payment);
             orderEvent.getOrder().setPaymentCode(savedPayment.getCode());
-            orderEvent.getOrder().setTotalPrice(savedPayment.getTotalPrice());
             orderEvent.getOrder().getOrderEventStatus().setPaymentStatus(EventStatus.ROLLBACK);
             eventPublisher.publishRollbackChart(orderEvent);
 

@@ -59,7 +59,6 @@ public class OrderService {
         Order order = findOrderByEventId(receivedOrder.getOrderEventStatus().getId());
 
         order.setPaymentCode(orderEvent.getOrder().getPaymentCode());
-        order.setTotalPrice(orderEvent.getOrder().getTotalPrice());
 
         order.getOrderEventStatus().setInventoryStatus(receivedOrder.getOrderEventStatus().getInventoryStatus());
         order.getOrderEventStatus().setChartStatus(receivedOrder.getOrderEventStatus().getChartStatus());

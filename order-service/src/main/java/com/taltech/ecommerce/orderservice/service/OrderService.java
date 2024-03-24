@@ -48,6 +48,7 @@ public class OrderService {
         orderEventStatus.setId(UUID.randomUUID().toString());
         order.setOrderEventStatus(orderEventStatus);
 
+        order.setDiscountId(UUID.randomUUID().toString());
         addDates(order);
         repository.save(order);
 

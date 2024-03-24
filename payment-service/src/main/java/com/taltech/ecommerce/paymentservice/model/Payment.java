@@ -30,6 +30,7 @@ public class Payment {
     private Long userId;
     @OneToMany(cascade = CascadeType.ALL)
     private List<PaymentItem> paymentItems;
+    private String discountId;
     private BigDecimal totalPrice;
     private boolean active;
     private LocalDateTime insertDate;

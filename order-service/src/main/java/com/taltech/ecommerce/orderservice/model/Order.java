@@ -37,6 +37,7 @@ public class Order {
     private Long userId;
     @OneToMany(cascade = CascadeType.ALL)
     private List<OrderItem> orderItems;
+    private String discountId;
     private String paymentCode;
     private BigDecimal totalPrice;
     private LocalDateTime insertDate;

@@ -40,7 +40,6 @@ public class DataLoader implements CommandLineRunner {
             payment.setCode(UUID.randomUUID().toString());
             payment.setUserId(12345L);
             payment.setPaymentItems(List.of(paymentItem, paymentItem2));
-            payment.setDiscountId(UUID.randomUUID().toString());
             payment.setTotalPrice(new BigDecimal(1800));
             payment.setActive(true);
             payment.setInsertDate(LocalDateTime.now());
@@ -66,7 +65,6 @@ public class DataLoader implements CommandLineRunner {
             payment2.setCode(UUID.randomUUID().toString());
             payment2.setUserId(67890L);
             payment2.setPaymentItems(List.of(paymentItem3, paymentItem4));
-            payment2.setDiscountId(UUID.randomUUID().toString());
             payment2.setTotalPrice(new BigDecimal(3600));
             payment2.setActive(true);
             payment2.setInsertDate(LocalDateTime.now());
